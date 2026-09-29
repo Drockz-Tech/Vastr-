@@ -16,3 +16,4 @@ Reviewers will reject PRs that:
 - Mix UI code with raw Supabase queries.
 - Do not handle error states or loading states.
 - Introduce database schema changes without a corresponding SQL migration file.
+- Hardcode sensitive information, API keys, or tokens (must use `.env`).

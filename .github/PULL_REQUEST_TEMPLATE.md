@@ -8,6 +8,7 @@
 - [ ] Used `src/theme/tokens.ts` for all colors and spacing
 - [ ] Form payloads validated with Zod
 - [ ] Loading states and Error states handled gracefully
+- [ ] NO hardcoded API keys or sensitive secrets (used environment variables)
 
 ## Database Changes
 - [ ] Does this PR alter the database schema?

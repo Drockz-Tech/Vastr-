@@ -16,6 +16,7 @@ Welcome to the Vastré codebase! To maintain our enterprise-grade architecture, 
 - **MIGRATIONS ONLY:** Never manually edit the database in the Supabase UI. All schema changes must be written as SQL files inside `supabase/migrations/`.
 - **TYPESCRIPT SYNC:** If the database schema changes, the `src/types/database.ts` file MUST be updated to reflect the exact Postgres Row types.
 - **SOFT DELETES:** Never use `DELETE FROM`. Update the `deleted_at` timestamp to preserve relational integrity.
+- **NO HARDCODED SECRETS:** Never hardcode API keys, tokens, or sensitive URLs in code. Always use `process.env` and the `.env` file.
 
 ## 4. Error Handling
 - **GLOBAL BOUNDARIES:** Do not let components crash. Let unhandled errors bubble up to the `ErrorBoundary`.
