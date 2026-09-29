@@ -26,19 +26,17 @@ A wardrobe app only works if the user actually logs their clothes. We must make 
     *   **Swipe Left:** "Not feeling it." -> Shows the next outfit.
 *   **Platform Nuance:** Mobile is perfect for physical swiping. On the Web, we will use left/right arrow keys or a grid-based "Lookbook" view.
 
-### B. AI Auto-Tagging & Background Removal (The "Closet")
-Adding individual clothing items must be magical, not tedious.
-*   **The Flow:** User snaps a picture of a shirt on their bed. 
-*   **The Magic:** In the background, an AI endpoint removes the messy background, leaving a clean cutout of the shirt. It automatically tags it as `[Top]`, `[Blue]`, `[Cotton]`.
-*   **Platform Nuance:** 
-    *   **Mobile:** Relies heavily on the device camera. "Batch capture" mode allows taking 10 photos in a row.
-    *   **Web:** Drag-and-drop interface. Users can drag 20 photos from an online shopping receipt or their hard drive directly into their Vastré digital closet.
+### B. The Closet (Inventory, Combinations & Filters)
+*   **The View:** A beautiful grid of all clothing items.
+*   **Tracking & Filters:** When logging what you wear, users can add tags like *event*, *season*, or *mood*. The closet can be filtered by these tags to quickly find specific items.
+*   **Custom Combinations:** Users can manually select multiple items from their closet to build and save custom outfits, right within the whole closet view.
+*   **Adding Items:** Users snap pictures; AI removes the background for a clean aesthetic.
 
 ### C. Laundry & Cleaning Status
 Clothes shouldn't be suggested if they are dirty.
-*   **The Logic:** Every item has a threshold (e.g., Jeans = 5 wears, Shirts = 1 wear). When an item hits the threshold, its status changes to "Dirty".
-*   **The UX:** Dirty items are grayed out in the Closet and won't appear in the Style Swipe. 
-*   **The "Wash Day" Feature:** A satisfying button called "Do Laundry." Clicking it resets all "Dirty" items back to "Clean" with a beautiful celebration animation.
+*   **The Logic:** Laundry is entirely manual. The user explicitly marks an item as "In Laundry". 
+*   **The UX:** Items currently in the laundry are hidden from the active Closet view and won't appear in the Style Swipe or available combinations.
+*   **The "Wash Day" Feature:** A satisfying button called "Mark as Clean" in the Laundry section. Clicking it moves items back to the active Closet.
 
 ### D. Packing Capsules (Travel)
 *   **The Flow:** User clicks "New Trip" and inputs the location, dates, and weather.
@@ -60,11 +58,5 @@ We will use a bottom tab navigation for Mobile, and a side-rail navigation for W
 ---
 
 > [!IMPORTANT]
-> ## User Review Required
-> Please review this deeper product design strategy. 
-
-> [!WARNING]
-> ## Open Questions (Product Design)
-> 1. **The "Style Swipe" Concept:** Does the idea of users uploading their own "mirror selfies" as the source for the swipe cards sound exactly like what you envisioned? 
-> 2. **Laundry Logic:** Should the app *automatically* mark things as dirty after X wears, or should it be a *manual* toggle by the user (e.g., swiping an item into a "hamper" within the app)?
-> 3. Once you approve these flows, I will start scaffolding the Expo project and building the UI foundation. Are we ready to start coding?
+> ## Next Steps
+> The core design decisions (Manual Laundry, Custom Combinations, Filtering) are locked in. The next phase is scaffolding the Expo project and translating the wireframes into React Native UI components.
