@@ -5,7 +5,7 @@
 -- (Replace '00000000-0000-0000-0000-000000000000' with your actual test user's UUID in development)
 
 /*
-INSERT INTO items (id, user_id, image_url, category, color, season) VALUES 
+INSERT INTO items (id, user_id, image_path, category, color, season) VALUES
 ('11111111-1111-1111-1111-111111111111', '00000000-0000-0000-0000-000000000000', 'https://example.com/shirt1.jpg', 'Top', 'White', 'All'),
 ('22222222-2222-2222-2222-222222222222', '00000000-0000-0000-0000-000000000000', 'https://example.com/jeans1.jpg', 'Bottom', 'Blue', 'All'),
 ('33333333-3333-3333-3333-333333333333', '00000000-0000-0000-0000-000000000000', 'https://example.com/shoes1.jpg', 'Shoes', 'Black', 'All');

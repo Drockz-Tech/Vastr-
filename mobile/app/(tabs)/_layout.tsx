@@ -1,8 +1,26 @@
 import { Tabs } from "expo-router";
+import { Redirect } from 'expo-router';
+import { ActivityIndicator, View } from 'react-native';
+import { useAuth } from '../../src/providers/AuthProvider';
+import { colors } from '../../src/theme/tokens';
 
 export default function TabLayout() {
+  const { session, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  if (!session) {
+    return <Redirect href="/(auth)/sign-in" />;
+  }
+
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: "black", headerShown: true }}>
+    <Tabs screenOptions={{ tabBarActiveTintColor: colors.primary, headerShown: true }}>
       <Tabs.Screen
         name="index"
         options={{

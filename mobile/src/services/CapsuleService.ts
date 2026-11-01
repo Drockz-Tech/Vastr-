@@ -1,6 +1,6 @@
 import { supabase } from '../db/supabase';
 import { Capsule } from '../types/database';
-import { createResponse, ServiceResponse } from './BaseService';
+import { createResponse, ServiceResponse, toError } from './BaseService';
 
 export const CapsuleService = {
   /**
@@ -8,6 +8,7 @@ export const CapsuleService = {
    */
   async createCapsule(userId: string, name: string, startDate?: string, endDate?: string): Promise<ServiceResponse<Capsule>> {
     try {
+      if (!userId || !name.trim()) throw new Error('A user and trip name are required');
       const { data, error } = await supabase
         .from('capsules')
         .insert([{ user_id: userId, name, start_date: startDate, end_date: endDate }])
@@ -16,8 +17,8 @@ export const CapsuleService = {
 
       if (error) throw error;
       return createResponse<Capsule>(data);
-    } catch (error: any) {
-      return createResponse<Capsule>(null, error);
+    } catch (error: unknown) {
+      return createResponse<Capsule>(null, toError(error));
     }
   },
 
@@ -28,12 +29,25 @@ export const CapsuleService = {
     try {
       const { error } = await supabase
         .from('capsule_items')
-        .insert([{ capsule_id: capsuleId, item_id: itemId }]);
+        .upsert({ capsule_id: capsuleId, item_id: itemId }, { onConflict: 'capsule_id,item_id', ignoreDuplicates: true });
 
       if (error) throw error;
       return createResponse<boolean>(true);
-    } catch (error: any) {
-      return createResponse<boolean>(false, error);
+    } catch (error: unknown) {
+      return createResponse<boolean>(false, toError(error));
+    }
+  },
+
+  async getCapsules(): Promise<ServiceResponse<Capsule[]>> {
+    try {
+      const { data, error } = await supabase
+        .from('capsules')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return createResponse<Capsule[]>(data);
+    } catch (error: unknown) {
+      return createResponse<Capsule[]>(null, toError(error));
     }
   }
 };

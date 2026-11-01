@@ -1,6 +1,6 @@
 import { supabase } from '../db/supabase';
 import { Log } from '../types/database';
-import { createResponse, ServiceResponse } from './BaseService';
+import { createResponse, ServiceResponse, toError } from './BaseService';
 
 export const LogService = {
   /**
@@ -25,8 +25,28 @@ export const LogService = {
       // the `items` worn count if we add that to the schema later.
       
       return createResponse<Log>(data);
-    } catch (error: any) {
-      return createResponse<Log>(null, error);
+    } catch (error: unknown) {
+      return createResponse<Log>(null, toError(error));
+    }
+  }
+  ,
+  async getWearHistory(limit: number = 30): Promise<ServiceResponse<Log[]>> {
+    try {
+      if (!Number.isInteger(limit) || limit < 1 || limit > 100) {
+        throw new Error('Invalid wear history limit');
+      }
+
+      const { data, error } = await supabase
+        .from('logs')
+        .select('*')
+        .order('worn_date', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (error) throw error;
+      return createResponse<Log[]>(data);
+    } catch (error: unknown) {
+      return createResponse<Log[]>(null, toError(error));
     }
   }
 };

@@ -1,5 +1,7 @@
 import { supabase } from '../db/supabase';
 import { createResponse, ServiceResponse } from './BaseService';
+import { toError } from './BaseService';
+import { AuthCredentialsSchema } from '../lib/validations';
 import { User, Session } from '@supabase/supabase-js';
 
 export const AuthService = {
@@ -20,8 +22,8 @@ export const AuthService = {
       const { data, error } = await supabase.auth.getSession();
       if (error) throw error;
       return createResponse<Session>(data.session);
-    } catch (error: any) {
-      return createResponse<Session>(null, error);
+    } catch (error: unknown) {
+      return createResponse<Session>(null, toError(error));
     }
   },
 
@@ -36,20 +38,21 @@ export const AuthService = {
     } catch (error: any) {
       return createResponse<boolean>(false, error);
     }
-  }
+  },
   /**
    * Signs in a user with email and password.
    */
   async signIn(email: string, password: string): Promise<ServiceResponse<Session>> {
     try {
+      const credentials = AuthCredentialsSchema.parse({ email, password });
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: credentials.email,
+        password: credentials.password,
       });
       if (error) throw error;
       return createResponse<Session>(data.session);
-    } catch (error: any) {
-      return createResponse<Session>(null, error);
+    } catch (error: unknown) {
+      return createResponse<Session>(null, toError(error));
     }
   },
 
@@ -58,14 +61,15 @@ export const AuthService = {
    */
   async signUp(email: string, password: string): Promise<ServiceResponse<Session>> {
     try {
+      const credentials = AuthCredentialsSchema.parse({ email, password });
       const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
+        email: credentials.email,
+        password: credentials.password,
       });
       if (error) throw error;
       return createResponse<Session>(data.session);
-    } catch (error: any) {
-      return createResponse<Session>(null, error);
+    } catch (error: unknown) {
+      return createResponse<Session>(null, toError(error));
     }
   }
 };

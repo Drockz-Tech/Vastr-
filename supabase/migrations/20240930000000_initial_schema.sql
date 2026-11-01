@@ -2,7 +2,7 @@
 
 -- 1. Items (The Closet)
 CREATE TABLE items (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     image_url TEXT NOT NULL,
     category TEXT NOT NULL CHECK (category IN ('Top', 'Bottom', 'Shoes', 'Outerwear', 'Accessory')),
@@ -16,7 +16,7 @@ CREATE TABLE items (
 
 -- 2. Outfits (Combinations & Swipe Deck)
 CREATE TABLE outfits (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     name TEXT, 
     image_url TEXT, 
@@ -34,7 +34,7 @@ CREATE TABLE outfit_items (
 
 -- 4. Logs (Tracking what you wore and when)
 CREATE TABLE logs (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     outfit_id UUID REFERENCES outfits(id) ON DELETE CASCADE,
     event_tag TEXT,
@@ -44,7 +44,7 @@ CREATE TABLE logs (
 
 -- 5. Capsules (Travel Packing)
 CREATE TABLE capsules (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
     start_date DATE,
