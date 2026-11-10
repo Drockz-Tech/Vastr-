@@ -6,6 +6,7 @@ import { LogService } from '../services/LogService';
 import { OutfitService } from '../services/OutfitService';
 import { StorageService } from '../services/StorageService';
 import { Outfit } from '../types/database';
+import { HOME_QUERY_KEY } from './useHome';
 
 export const OUTFITS_QUERY_KEY = ['outfits'];
 export type SwipeOutfit = Outfit & { imageUrl: string | null };
@@ -40,6 +41,7 @@ export function useCreateOutfit() {
       OutfitService.createCombination(payload.itemIds, payload.name, payload.imagePath),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: OUTFITS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: HOME_QUERY_KEY });
     },
   });
 }

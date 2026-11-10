@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useActiveCloset } from '../../src/hooks/useCloset';
 import { useAddItemToCapsule, useCapsules, useCreateCapsule } from '../../src/hooks/useCapsules';
 import { CreateCapsuleSchema } from '../../src/lib/validations';
-import { colors, spacing } from '../../src/theme/tokens';
+import { spacing, ThemeColors } from '../../src/theme/tokens';
+import { useAppTheme } from '../../src/providers/ThemeProvider';
 
 export default function Organize() {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { data: capsules, error, isLoading } = useCapsules();
   const { data: items } = useActiveCloset();
   const createMutation = useCreateCapsule();
@@ -95,26 +98,26 @@ export default function Organize() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ThemeColors) { return StyleSheet.create({
   container: { backgroundColor: colors.secondary, flexGrow: 1, padding: spacing.lg },
   centered: { alignItems: 'center', flex: 1, justifyContent: 'center', padding: spacing.xl },
   title: { color: colors.text.primary, fontSize: 28, fontWeight: '700', marginBottom: spacing.sm },
   subtitle: { color: colors.text.secondary, fontSize: 16, marginBottom: spacing.lg },
   sectionTitle: { color: colors.text.primary, fontSize: 18, fontWeight: '700', marginBottom: spacing.sm, marginTop: spacing.xl },
-  input: { backgroundColor: colors.text.inverse, borderColor: colors.border, borderRadius: 8, borderWidth: 1, color: colors.text.primary, marginBottom: spacing.md, padding: spacing.md },
+  input: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 8, borderWidth: 1, color: colors.text.primary, marginBottom: spacing.md, padding: spacing.md },
   row: { flexDirection: 'row', gap: spacing.sm },
   half: { flex: 1 },
   button: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 8, justifyContent: 'center', padding: spacing.md },
   buttonText: { color: colors.text.inverse, fontWeight: '700' },
   error: { color: colors.accent, marginBottom: spacing.md },
-  trip: { backgroundColor: colors.text.inverse, borderColor: colors.border, borderRadius: 8, borderWidth: 1, marginBottom: spacing.sm, padding: spacing.md },
+  trip: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 8, borderWidth: 1, marginBottom: spacing.sm, padding: spacing.md },
   selectedTrip: { borderColor: colors.primary, borderWidth: 2 },
   tripName: { color: colors.text.primary, fontWeight: '700' },
   tripDates: { color: colors.text.secondary, marginTop: spacing.xs },
   itemGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  item: { backgroundColor: colors.text.inverse, borderColor: colors.border, borderRadius: 8, borderWidth: 1, minWidth: '30%', padding: spacing.md },
+  item: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 8, borderWidth: 1, minWidth: '30%', padding: spacing.md },
   selectedItem: { backgroundColor: colors.primary, borderColor: colors.primary },
   itemText: { color: colors.text.primary, fontWeight: '700' },
   itemSubtext: { color: colors.text.secondary, marginTop: spacing.xs },
   disabled: { opacity: 0.4 },
-});
+}); }
