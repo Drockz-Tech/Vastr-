@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { ActivityIndicator, FlatList, Image, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useActiveCloset, useCreateItem, useSendToLaundry, ClosetItem } from '../../src/hooks/useCloset';
 import { useCreateOutfit } from '../../src/hooks/useOutfits';
 import { CreateItemPayload, CreateItemSchema, CreateOutfitSchema, ItemCategoryEnum } from '../../src/lib/validations';
-import { colors, spacing } from '../../src/theme/tokens';
+import { spacing, ThemeColors } from '../../src/theme/tokens';
+import { useAppTheme } from '../../src/providers/ThemeProvider';
 
 export default function Closet() {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [page] = useState(0);
   const { data: items, error, isLoading, isFetching, refetch } = useActiveCloset(page);
   const laundryMutation = useSendToLaundry(page);
@@ -141,6 +144,8 @@ function AddItemModal({
   onClose: () => void;
   onSubmit: (imageUri: string, payload: CreateItemPayload) => void;
 }) {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [category, setCategory] = useState<typeof ItemCategoryEnum._output>('Top');
   const [color, setColor] = useState('');
@@ -235,6 +240,8 @@ function ClosetCard({
   onLaundry: () => void;
   onSelect: () => void;
 }) {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   return (
     <Pressable onPress={onSelect} style={[styles.card, isSelected && styles.selectedCard]}>
       {item.imageUrl ? <Image accessibilityLabel={`${item.category} item`} source={{ uri: item.imageUrl }} style={styles.image} /> : (
@@ -262,6 +269,8 @@ function CreateLookModal({
   onClose: () => void;
   onSubmit: (name: string) => void;
 }) {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [name, setName] = useState('');
   return (
     <Modal animationType="slide" onRequestClose={onClose} visible={visible}>
@@ -287,7 +296,7 @@ function CreateLookModal({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ThemeColors) { return StyleSheet.create({
   centered: { alignItems: 'center', flex: 1, justifyContent: 'center', padding: spacing.xl },
   emptyList: { flexGrow: 1 },
   list: { padding: spacing.sm },
@@ -322,6 +331,6 @@ const styles = StyleSheet.create({
   categoryOptionSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
   categoryOptionText: { color: colors.text.primary },
   categoryOptionTextSelected: { color: colors.text.inverse, fontWeight: '700' },
-  input: { backgroundColor: colors.text.inverse, borderColor: colors.border, borderRadius: 8, borderWidth: 1, color: colors.text.primary, marginBottom: spacing.md, padding: spacing.md },
+  input: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 8, borderWidth: 1, color: colors.text.primary, marginBottom: spacing.md, padding: spacing.md },
   error: { color: colors.accent, marginBottom: spacing.md },
-});
+}); }

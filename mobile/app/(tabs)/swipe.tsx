@@ -1,9 +1,12 @@
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useLogOutfitWorn, useSwipeDeck } from '../../src/hooks/useOutfits';
-import { colors, spacing } from '../../src/theme/tokens';
+import { spacing, ThemeColors } from '../../src/theme/tokens';
+import { useAppTheme } from '../../src/providers/ThemeProvider';
 
 export default function Swipe() {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { data: outfits, error, isLoading, refetch } = useSwipeDeck();
   const logMutation = useLogOutfitWorn();
   const [index, setIndex] = useState(0);
@@ -69,12 +72,12 @@ export default function Swipe() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ThemeColors) { return StyleSheet.create({
   container: { backgroundColor: colors.secondary, flex: 1, padding: spacing.lg },
   centered: { alignItems: 'center', backgroundColor: colors.secondary, flex: 1, justifyContent: 'center', padding: spacing.xl },
   title: { color: colors.text.primary, fontSize: 28, fontWeight: '700', marginBottom: spacing.sm, textAlign: 'center' },
   subtitle: { color: colors.text.secondary, fontSize: 16, marginBottom: spacing.lg, textAlign: 'center' },
-  card: { backgroundColor: colors.text.inverse, borderRadius: 16, elevation: 3, marginTop: spacing.md, overflow: 'hidden', shadowColor: colors.primary, shadowOpacity: 0.1, shadowRadius: 8 },
+  card: { backgroundColor: colors.surface, borderRadius: 16, elevation: 3, marginTop: spacing.md, overflow: 'hidden', shadowColor: colors.primary, shadowOpacity: 0.1, shadowRadius: 8 },
   image: { aspectRatio: 0.8, backgroundColor: colors.border, width: '100%' },
   imagePlaceholder: { alignItems: 'center', aspectRatio: 0.8, backgroundColor: colors.border, justifyContent: 'center' },
   placeholderText: { color: colors.text.secondary },
@@ -85,4 +88,4 @@ const styles = StyleSheet.create({
   secondaryButton: { alignItems: 'center', borderColor: colors.border, borderRadius: 8, borderWidth: 1, justifyContent: 'center', minWidth: 100, paddingHorizontal: spacing.lg, paddingVertical: spacing.md },
   secondaryButtonText: { color: colors.text.primary, fontWeight: '700' },
   error: { color: colors.accent, marginTop: spacing.md, textAlign: 'center' },
-});
+}); }

@@ -1,5 +1,5 @@
 import { Redirect, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -11,11 +11,14 @@ import {
   View,
 } from 'react-native';
 
-import { colors, spacing } from '../../src/theme/tokens';
+import { spacing, ThemeColors } from '../../src/theme/tokens';
 import { AuthCredentialsSchema } from '../../src/lib/validations';
 import { useAuth } from '../../src/providers/AuthProvider';
+import { useAppTheme } from '../../src/providers/ThemeProvider';
 
 export default function SignInScreen() {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const router = useRouter();
   const { session, isLoading, initializationError, signIn, signUp } = useAuth();
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
@@ -115,7 +118,7 @@ export default function SignInScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ThemeColors) { return StyleSheet.create({
   container: {
     backgroundColor: colors.secondary,
     flex: 1,
@@ -145,7 +148,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   },
   input: {
-    backgroundColor: colors.text.inverse,
+    backgroundColor: colors.surface,
     borderColor: colors.border,
     borderRadius: 10,
     borderWidth: 1,
@@ -185,4 +188,4 @@ const styles = StyleSheet.create({
   loader: {
     flex: 1,
   },
-});
+}); }

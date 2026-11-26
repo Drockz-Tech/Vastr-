@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../src/providers/AuthProvider';
-import { colors, spacing } from '../../src/theme/tokens';
+import { spacing, ThemeColors } from '../../src/theme/tokens';
 import { useWearAnalytics } from '../../src/hooks/useAnalytics';
+import { useAppTheme } from '../../src/providers/ThemeProvider';
 
 export default function Profile() {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const router = useRouter();
   const { session, signOut } = useAuth();
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +56,8 @@ export default function Profile() {
 }
 
 function Stat({ value, label }: { value: number; label: string }) {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   return (
     <View style={styles.stat}>
       <Text style={styles.statValue}>{value}</Text>
@@ -61,13 +66,13 @@ function Stat({ value, label }: { value: number; label: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ThemeColors) { return StyleSheet.create({
   container: { alignItems: 'center', backgroundColor: colors.secondary, flex: 1, justifyContent: 'center', padding: spacing.xl },
   title: { color: colors.text.primary, fontSize: 24, fontWeight: '700', marginBottom: spacing.md },
   subtitle: { color: colors.text.secondary, marginBottom: spacing.sm },
   sectionTitle: { alignSelf: 'stretch', color: colors.text.primary, fontSize: 18, fontWeight: '700', marginBottom: spacing.sm, marginTop: spacing.xl },
   stats: { flexDirection: 'row', gap: spacing.sm, marginVertical: spacing.lg },
-  stat: { backgroundColor: colors.text.inverse, borderRadius: 10, minWidth: 92, padding: spacing.md },
+  stat: { backgroundColor: colors.surface, borderRadius: 10, minWidth: 92, padding: spacing.md },
   statValue: { color: colors.text.primary, fontSize: 24, fontWeight: '700' },
   statLabel: { color: colors.text.secondary, fontSize: 12, marginTop: spacing.xs },
   historyRow: { alignItems: 'center', alignSelf: 'stretch', borderBottomColor: colors.border, borderBottomWidth: 1, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: spacing.md },
@@ -76,4 +81,4 @@ const styles = StyleSheet.create({
   error: { color: colors.accent, marginVertical: spacing.md },
   button: { backgroundColor: colors.primary, borderRadius: 8, marginTop: spacing.lg, minWidth: 140, padding: spacing.md },
   buttonText: { color: colors.text.inverse, fontWeight: '700', textAlign: 'center' },
-});
+}); }
